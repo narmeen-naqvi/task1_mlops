@@ -1,0 +1,30 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Pull Repository') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/narmeen-naqvi/task1_mlops.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe" build -t my-docker-image .'
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                sh '"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe" run -d -p 8080:8080 --name my-container my-docker-image'
+            }
+        }
+
+        stage('Publish Results') {
+            steps {
+                sh '"C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe" exec my-container python publish_results.py'
+            }
+        }
+    }
+}
